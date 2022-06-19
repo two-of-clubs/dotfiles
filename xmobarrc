@@ -1,0 +1,36 @@
+Config { font = "xft:SpaceMono Nerd Font:pixelsize=17,M+ 1c:pixelsize=20"
+       , borderColor = "grey"
+       , borderWidth = 4
+       , border = BottomB
+       , bgColor = "#1f232b"
+       , fgColor = "grey"
+       , alpha = 255
+       , position = TopH 45
+       , allDesktops = True
+       , overrideRedirect = True
+       , iconRoot = "/home/aleyva/Downloads/" -- default: '.'
+       , commands = [
+                      -- Run Network "wlp0s20f0u5u1" ["-L","0","-H","32", "--normal","green","--high","red"] 10
+		      -- Run Network "wlp0s20f0u5u1" ["--template", "Net: <tx>kB|<rx>kB", "-L","1000","-H","5000", "--low", "gray", "--normal","green","--high","red"] 10
+                    Run DynNetwork     [ "--template" , "<action=nm-connection-editor> </action> <tx>  <rx> "
+                             , "--Low"      , "1000"       -- units: kB/s
+                             , "--High"     , "5000"       -- units: kB/s
+                             ] 10
+		    , Run Date "%a %d/%m %H:%M" "date" 10
+                    , Run Com "/bin/sh" [ "/home/aleyva/.xmonad/music.sh"] "music" 10
+		    , Run StdinReader
+		    , Run Battery        [ "--template" , "<acstatus>"
+                             , "--Low"      , "10"        -- units: %
+                             , "--High"     , "80"        -- units: %
+                             , "--" -- battery specific options
+                                       -- discharging status
+                                       , "-o"	, "<left>% (<timeleft>)"
+                                       -- AC "on" status
+                                       , "-O"	, "Charging"
+                                       -- charged status
+                                       , "-i"	, "Charged"
+                             ] 50 
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "<icon=haskull.xpm/><fc=#dcffc7>%StdinReader%</fc>}{<fc=#ffc3a1>%music% | </fc><fc=#91bbff>%dynnetwork% | </fc><fc=#ff7891> %battery% |</fc><fc=#ffe19c> %date%</fc>   "
